@@ -14,14 +14,20 @@ script_fail() {
 
 # Detect resource opener.
 OPENER=
-if type xdg-open > /dev/null ; then
+if type firefox > /dev/null ; then
+    OPENER='firefox -width 820 --private-window'
+elif type xdg-open > /dev/null ; then
     OPENER='xdg-open'
 elif type gio > /dev/null ; then
     OPENER='gio open'
+elif type lynx > /dev/null ; then
+    OPENER='lynx'
 else
+    type firefox
     type xdg-open
     type gio
-    script_fail "no resource opener" "Either \`xdg-open\` or \`gio\` must be installed"
+    type lynx
+    script_fail "no resource opener" "\`firefox\`, \`xdg-open\` or \`gio\` must be installed"
 fi
 
 match_version='[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+'
@@ -114,4 +120,9 @@ elif ! $(echo "$lua_available_ver" | grep "$select_ver" > /dev/null) ; then
     script_fail "Lua version not found" "$select_ver"
 fi
 
-$OPENER "$lua_top/lua-$select_ver/doc/readme.html"
+if [ "$OPENER" = "lynx" ] ; then
+    $OPENER "$lua_top/lua-$select_ver/doc/readme.html"
+else
+    $OPENER "$lua_top/lua-$select_ver/doc/readme.html" &
+fi
+
