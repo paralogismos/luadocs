@@ -15,7 +15,7 @@ script_fail() {
 # Detect resource opener.
 OPENER=
 if type firefox > /dev/null ; then
-    OPENER='firefox -width 820 --private-window'
+    OPENER='firefox --new-window'
 elif type xdg-open > /dev/null ; then
     OPENER='xdg-open'
 elif type gio > /dev/null ; then
