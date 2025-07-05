@@ -4,7 +4,7 @@
 set -e
 
 # Global parameters
-luadocs_version=0.1.0
+luadocs_version=0.2.0
 lua_top="$HOME/builds/lua"
 
 script_fail() {
