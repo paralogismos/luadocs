@@ -1,14 +1,15 @@
-# A simple shell script makefile.
+# Makefile.in
 .POSIX:
 SHELL=/bin/sh
 
 EXEC=luadocs
 EXT=sh
-SRC_FILE=$(EXEC).$(EXT)
+LOCAL_BUILD_ARTIFACTS=Makefile config.status
 
 # Default installation directory.
 @bindir
 
+SRC_FILE=$(EXEC).$(EXT)
 INSTALL_PATH=$(bindir)/$(EXEC)
 
 .PHONY: all install reinstall uninstall
@@ -28,4 +29,4 @@ uninstall:
 	@echo $(EXEC) has been uninstalled.
 
 distclean:
-	@rm -f Makefile
+	@rm -f $(LOCAL_BUILD_ARTIFACTS)

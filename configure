@@ -6,6 +6,7 @@ set -e
 
 # Global build parameters
 exec_name="luadocs"
+status="./configure"
 
 usage() {
     printf "configure script for %s\n" $exec_name
@@ -80,9 +81,15 @@ do
     fi
     case "$OPT" in
         exec_prefix )
-            require_arg ; exec_prefix=$(tilde_expand "$OPTARG") ;;
+            require_arg
+            exec_prefix=$(tilde_expand "$OPTARG")
+            status="${status} --exec_prefix=${exec_prefix}"
+            ;;
         bindir )
-            require_arg ; bindir=$(tilde_expand "$OPTARG") ;;
+            require_arg
+            bindir=$(tilde_expand "$OPTARG")
+            status="${status} --bindir=${bindir}"
+            ;;
         h | help )
             usage
             exit 0 ;;
@@ -99,5 +106,9 @@ if [ -z "$bindir" ] ; then
     bindir="$exec_prefix"/bin  # user executable directory
 fi
 
-# Make template substitutions to create Makefile
-sed "/^@bindir/c bindir=${bindir}" Makefile.in > Makefile
+# Create Makefile from template.
+sed "1c # This Makefile was generated automatically by \`configure\`.
+/^@bindir/c bindir=${bindir}" Makefile.in > Makefile
+
+# Create `config.status` file.
+echo "${status}" > config.status
