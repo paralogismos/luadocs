@@ -1,0 +1,31 @@
+# A simple shell script makefile.
+.POSIX:
+SHELL=/bin/sh
+
+EXEC=luadocs
+EXT=sh
+SRC_FILE=$(EXEC).$(EXT)
+
+# Default installation directory.
+@bindir
+
+INSTALL_PATH=$(bindir)/$(EXEC)
+
+.PHONY: all install reinstall uninstall
+all: install
+
+install:
+	@cp $(SRC_FILE) $(INSTALL_PATH)
+	@chmod +x $(INSTALL_PATH)  # Set executable permissions
+	@echo $(EXEC) installed in $(bindir).
+
+reinstall:
+	@make -s uninstall
+	@make -s install
+
+uninstall:
+	@rm -f $(INSTALL_PATH)
+	@echo $(EXEC) has been uninstalled.
+
+distclean:
+	@rm -f Makefile
