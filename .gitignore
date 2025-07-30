@@ -2,4 +2,4 @@
 *.sh~
 *~
 #*#
-Uninstall
+Makefile
