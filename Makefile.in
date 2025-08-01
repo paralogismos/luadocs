@@ -1,25 +1,29 @@
 # Makefile.in
 .POSIX:
-SHELL=/bin/sh
+@SHELL
 
 EXEC=luadocs
 EXT=sh
 LOCAL_BUILD_ARTIFACTS=Makefile config.status
 
 # Default installation directory.
-@bindir
+@BINDIR
 
 SRC_FILE=$(EXEC).$(EXT)
-INSTALL_PATH=$(bindir)/$(EXEC)
+INSTALL_PATH=$(BINDIR)/$(EXEC)
 
-.PHONY: all install reinstall uninstall
+.PHONY: all
 all: install
 
-install:
+install: $(SRC_FILE)
 	@cp $(SRC_FILE) $(INSTALL_PATH)
 	@chmod +x $(INSTALL_PATH)  # Set executable permissions
-	@echo $(EXEC) installed in $(bindir).
+	@echo $(EXEC) installed in $(BINDIR).
 
+Makefile: config.status
+	@$(SHELL) config.status
+
+.PHONY: reinstall uninstall distclean
 reinstall:
 	@make -s uninstall
 	@make -s install
