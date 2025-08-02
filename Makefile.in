@@ -20,10 +20,7 @@ install: $(SRC_FILE)
 	@chmod +x $(INSTALL_PATH)  # Set executable permissions
 	@echo $(EXEC) installed in $(BINDIR).
 
-Makefile: config.status
-	@$(SHELL) config.status
-
-.PHONY: reinstall uninstall distclean
+.PHONY: reinstall uninstall distclean Makefile
 reinstall:
 	@make -s uninstall
 	@make -s install
@@ -34,3 +31,6 @@ uninstall:
 
 distclean:
 	@rm -f $(LOCAL_BUILD_ARTIFACTS)
+
+Makefile: config.status
+	@$(SHELL) config.status
