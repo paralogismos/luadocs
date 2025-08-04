@@ -4,12 +4,15 @@
 set -e
 #set -x
 
-# Global build parameters
-EXEC_NAME="luadocs"
-CONFIGURE=$0
-CONFIG_STATUS="./config.status"
-STATUS="./configure"
+# Configure script parameters.
 SHELL="/bin/sh"
+CONFIGURE="$0"
+CONFIG_STATUS="./config.status"
+
+# Global build parameters.
+EXEC_NAME=luadocs
+EXT=sh
+LOCAL_BUILD_ARTIFACTS="Makefile $CONFIG_STATUS"
 
 usage() {
     printf "configure script for %s\n" $EXEC_NAME
@@ -115,9 +118,14 @@ cat <<_CSEOF > "$CONFIG_STATUS"
 # Run this file to recreate the current configuration.
 
 # Create Makefile from template.
-sed "1c # This Makefile was generated automatically by $CONFIGURE.
-/^@SHELL/c SHELL=$SHELL
-/^@BINDIR/c BINDIR=$BINDIR" Makefile.in > Makefile
+awk \
+'NR == 1 { print "# This Makefile was generated automatically by $CONFIGURE." } ;\
+/.*=@shell/ { sub(/@shell/, "${SHELL}") ; print ; next } ;\
+/.*=@bindir/ { sub(/@bindir/, "${BINDIR}") ; print ; next } ;\
+/.*=@exec_name/ { sub(/@exec_name/, "${EXEC_NAME}") ; print ; next } ;\
+/.*=@ext/ { sub(/@ext/, "${EXT}") ; print ; next } ;\
+/.*=@local_build_artifacts/ { sub(/@local_build_artifacts/, "${LOCAL_BUILD_ARTIFACTS}") ; print ; next} ;\
+NR > 1 { print }' Makefile.in > Makefile
 _CSEOF
 
 $SHELL $CONFIG_STATUS

@@ -1,16 +1,16 @@
 # Makefile.in
 .POSIX:
-@SHELL
+SHELL=@shell
 
-EXEC=luadocs
-EXT=sh
-LOCAL_BUILD_ARTIFACTS=Makefile config.status
+EXEC_NAME=@exec_name
+EXT=@ext
+LOCAL_BUILD_ARTIFACTS=@local_build_artifacts
 
 # Default installation directory.
-@BINDIR
+BINDIR=@bindir
 
-SRC_FILE=$(EXEC).$(EXT)
-INSTALL_PATH=$(BINDIR)/$(EXEC)
+SRC_FILE=$(EXEC_NAME).$(EXT)
+INSTALL_PATH=$(BINDIR)/$(EXEC_NAME)
 
 .PHONY: all
 all: install
@@ -18,7 +18,7 @@ all: install
 install: $(SRC_FILE)
 	@cp $(SRC_FILE) $(INSTALL_PATH)
 	@chmod +x $(INSTALL_PATH)  # Set executable permissions
-	@echo $(EXEC) installed in $(BINDIR).
+	@echo $(EXEC_NAME) installed in $(BINDIR).
 
 .PHONY: reinstall uninstall distclean Makefile
 reinstall:
@@ -27,10 +27,10 @@ reinstall:
 
 uninstall:
 	@rm -f $(INSTALL_PATH)
-	@echo $(EXEC) has been uninstalled.
+	@echo $(EXEC_NAME) has been uninstalled.
 
 distclean:
 	@rm -f $(LOCAL_BUILD_ARTIFACTS)
 
-Makefile: config.status
+Makefile: Makefile.in config.status
 	@$(SHELL) config.status
